@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Family;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Paddle\Cashier;
@@ -26,22 +27,23 @@ Route::get('/families', function () {
 
 Route::post('/pay-link', function () {
     $data = request()->json();
-    $id = (int)$data->get('id');
-    $cart = (array)$data->get('cart');
-    $full = (bool)$data->get('buyFullFamily');
 
-    $family = Family::findOrFail($id);
+    $familyId = (int)$data->get('familyId');
+    // $styles = (array)$data->get('styles');
+    $fullFamily = (bool)$data->get('fullFamily');
 
-    if ($full) {
-        $price = $family->family_price;
-    } else {
-        $price = count($cart) * $family->style_price;
-    }
+    $family = Family::findOrFail($familyId);
+    $order = new Order([
+        'styles' => [],
+        'full_family' => $fullFamily,
+    ]);
+    $order->family()->associate($family);
+    $order->save();
 
     $request = Cashier::post('/product/generate_pay_link', array_merge([
-        'title' => $family->name,
-        'prices' => [sprintf('EUR:%.2f', $price)],
-        'passthrough' => $data,
+        'title' => $order->getTitle(),
+        'prices' => [sprintf('EUR:%.2f', $order->getPrice())],
+        'passthrough' => (string)$order->id,
         'webhook_url' => Cashier::webhookUrl(),
     ], Cashier::paddleOptions()));
 

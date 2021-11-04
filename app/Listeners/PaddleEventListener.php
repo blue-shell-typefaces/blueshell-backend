@@ -2,6 +2,8 @@
 
 namespace App\Listeners;
 
+use App\Jobs\SendOrder;
+use App\Models\Order;
 use Laravel\Paddle\Events\WebhookReceived;
 
 class PaddleEventListener
@@ -15,7 +17,13 @@ class PaddleEventListener
     public function handle(WebhookReceived $event)
     {
         if ($event->payload['alert_name'] === 'payment_succeeded') {
-            // Handle the incoming event...
+            $orderId = $event->payload['passthrough']->orderId;
+
+            $order = Order::find($orderId);
+            $order->paid = true;
+            $order->save();
+
+            SendOrder::dispatch($order);
         }
     }
 }
