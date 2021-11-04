@@ -12,13 +12,13 @@ jobs:
     - uses: actions/checkout@master
     - uses: shivammathur/setup-php@v2
       with:
-        php-version: 8.0
+        php-version: '8.0'
     - run: composer install --no-progress --no-interaction --no-dev
     - uses: atymic/deployer-php-action@master
       with:
           ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           ssh-known-hosts: ${{ secrets.DEPLOY_SSH_KNOWN_HOSTS }}
-          deployer-version: 7.0
+          deployer-version: '7.0'
     - run: dep deploy
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
