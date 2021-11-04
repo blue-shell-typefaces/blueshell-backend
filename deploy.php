@@ -34,10 +34,17 @@ task('build', function () {
     run('cd {{release_path}} && build');
 });
 
+task('deploy', [
+    'deploy:prepare',
+    'deploy:vendors',
+    'artisan:storage:link',
+    'artisan:view:cache',
+    'deploy:publish',
+]);
+
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
 // Migrate database before symlink new release.
 
 before('deploy:symlink', 'artisan:migrate');
-
