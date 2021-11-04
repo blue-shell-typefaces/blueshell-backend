@@ -27,9 +27,8 @@ class PaddleEventListener
 
             // SendOrder::dispatch($order);
 
-            $message = new OrderMail($this->order);
-
-            Mail::to($this->order->email)
+            $message = new OrderMail($order);
+            Mail::to($order->email)
                 ->send($message);
         }
     }

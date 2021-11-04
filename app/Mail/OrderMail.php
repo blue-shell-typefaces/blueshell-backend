@@ -12,7 +12,7 @@ class OrderMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $order;
+    public $order;
 
     /**
      * Create a new message instance.
@@ -31,8 +31,6 @@ class OrderMail extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.order', [
-            'order' => $this->order,
-        ]);
+        return $this->view('mail.order');
     }
 }
