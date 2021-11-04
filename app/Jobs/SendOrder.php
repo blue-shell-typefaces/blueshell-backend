@@ -37,16 +37,22 @@ class SendOrder implements ShouldQueue
     {
         $message = new OrderMail($this->order);
 
-        $file = $this->order->family->getFullPath();
+        $familyPath = $this->order->family->getFullPath();
         if ($this->order->full_family) {
-            $message->attach($file, $this->order->family->name, [
-                'mime' => 'font/ttf',
-            ]);
+            $message->attach($familyPath, $this->order->family->filename);
         } else {
-            foreach ($this->order->styles as $style) {
-                $instance = `python generate_instance.py`;
-                $message->attachData($instance, $style, [
-                    'mime' => 'font/ttf',
+            foreach ($this->order->styles as $styleName => $style) {
+                $script = config('app.instancer');
+                $instanceFilename = sprintf('%s-%s.ttf', $this->order->family->name, $styleName);
+                $outputPath = tempnam(sys_get_temp_dir(), $instanceFilename);
+                $args = collect($style)
+                    ->map(function ($value, $key) {
+                        return "$key=$value";
+                    })
+                    ->join(' ');
+                `$script -o="$outputPath" "$familyPath" $args`;
+                $message->attach($outputPath, [
+                    'as' => $instanceFilename,
                 ]);
             }
         }

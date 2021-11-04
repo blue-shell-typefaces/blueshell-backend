@@ -2,6 +2,8 @@
 
 return [
 
+    'instancer' => env('APP_INSTANCER', 'fonttools varLib.instancer'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

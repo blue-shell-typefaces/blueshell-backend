@@ -29,12 +29,12 @@ Route::post('/pay-link', function () {
     $data = request()->json();
 
     $familyId = (int)$data->get('familyId');
-    // $styles = (array)$data->get('styles');
+    $styles = (array)$data->get('styles');
     $fullFamily = (bool)$data->get('fullFamily');
 
     $family = Family::findOrFail($familyId);
     $order = new Order([
-        'styles' => [],
+        'styles' => $styles,
         'full_family' => $fullFamily,
     ]);
     $order->family()->associate($family);
