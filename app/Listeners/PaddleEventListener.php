@@ -17,7 +17,7 @@ class PaddleEventListener
     public function handle(WebhookReceived $event)
     {
         if ($event->payload['alert_name'] === 'payment_succeeded') {
-            $orderId = $event->payload['passthrough']->orderId;
+            $orderId = $event->payload['passthrough'];
 
             $order = Order::find($orderId);
             $order->paid = true;
