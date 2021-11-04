@@ -7,7 +7,7 @@ require 'recipe/laravel.php';
 set('application', 'blueshell-backend');
 
 // Project repository
-set('repository', 'git@github.com:blue-shell-typefaces/blueshell-backend.git');
+set('repository', 'https://github.com/blue-shell-typefaces/blueshell-backend.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true); 
