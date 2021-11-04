@@ -52,6 +52,6 @@ class SendOrder implements ShouldQueue
         }
 
         Mail::to($this->order->email)
-            ->send(new OrderMail($this->order));
+            ->send($message);
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Listeners;
 
 use App\Jobs\SendOrder;
+use App\Mail\OrderMail;
 use App\Models\Order;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Paddle\Events\WebhookReceived;
 
 class PaddleEventListener
@@ -23,7 +25,12 @@ class PaddleEventListener
             $order->paid = true;
             $order->save();
 
-            SendOrder::dispatch($order);
+            // SendOrder::dispatch($order);
+
+            $message = new OrderMail($this->order);
+
+            Mail::to($this->order->email)
+                ->send($message);
         }
     }
 }
