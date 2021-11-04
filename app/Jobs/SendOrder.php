@@ -16,6 +16,8 @@ class SendOrder implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $order;
+
     /**
      * Create a new job instance.
      *
