@@ -37,9 +37,9 @@ class SendOrder implements ShouldQueue
     {
         $message = new OrderMail($this->order);
 
-        $file = $this->family->getFullPath();
+        $file = $this->order->family->getFullPath();
         if ($this->order->full_family) {
-            $message->attach($file, $this->family->name, [
+            $message->attach($file, $this->order->family->name, [
                 'mime' => 'font/ttf',
             ]);
         } else {

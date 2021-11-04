@@ -25,7 +25,7 @@ class Family extends Model
 
     const PATH = 'families';
 
-    protected function getFullPath()
+    public function getFullPath()
     {
         $paths = [self::PATH, $this->filename];
         $path = implode(DIRECTORY_SEPARATOR, $paths);
