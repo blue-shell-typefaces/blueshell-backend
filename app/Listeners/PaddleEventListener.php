@@ -19,7 +19,7 @@ class PaddleEventListener
         if ($event->payload['alert_name'] === 'payment_succeeded') {
             $orderId = $event->payload['passthrough'];
 
-            $order = Order::find($orderId);
+            $order = Order::findOrFail($orderId);
             $order->paid = true;
             $order->save();
 
