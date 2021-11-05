@@ -39,7 +39,7 @@ class SendOrder implements ShouldQueue
 
         $familyPath = $this->order->family->getFullPath();
         if ($this->order->full_family) {
-            $message->attach($familyPath, $this->order->family->filename);
+            $message->attach($familyPath);
         } else {
             foreach ($this->order->styles as $styleName => $style) {
                 $script = config('app.instancer');
